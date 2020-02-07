@@ -1,6 +1,6 @@
 import sys
 
-INFINITO = sys.maxsize
+INFINITO = float('inf')
 
 def lerArquivo(file):
  #Lendo arquivo e removendo vírgulas
@@ -27,7 +27,6 @@ def existeAberto (abertos):
 
 #Função auxiliar do djikstra/prim que verifica a menor distância até o momento de vértices abertos
 def menorEstimativa(distancias, abertos):
-
     menor = INFINITO
     numVertices = len(distancias)
     index = 0
@@ -42,7 +41,6 @@ def menorEstimativa(distancias, abertos):
 
 #Algoritmo de Djikstra
 def djikstra(file,origem):
-
     matriz = lerArquivo(file)
     numVertices = len(matriz[0])
     origem = origem - 1
@@ -65,9 +63,7 @@ def djikstra(file,origem):
         abertos[menorE] = False
 
         #Verificando se tem acesso ao vértice
-        if(distancias[menorE] == INFINITO):
-            distancias[menorE] = 0
-        else:
+        if(distancias[menorE] != INFINITO):
             #Relaxamento das arestas
             for i in range(numVertices):
                 peso = matriz[menorE][i]
@@ -75,12 +71,13 @@ def djikstra(file,origem):
                     if (peso != 0):
                         if (distancias[menorE]+peso < distancias[i]):
                             distancias[i] = distancias[menorE]+peso
+    
+    distancias[origem] = INFINITO  
       
     return distancias
 
 #Algoritmo de Bellman-Ford
 def bellmanFord(file,origem):
-
     matriz = lerArquivo(file)
     numVertices = len(matriz[0])
     origem = origem - 1
@@ -104,17 +101,13 @@ def bellmanFord(file,origem):
                     if (peso != 0):
                         if (distancias[y]+peso < distancias[i]):
                             distancias[i] = distancias[y]+peso
-
-    #Setando para 0 (vértice inacessível)
-    for i in range(numVertices):
-        if distancias[i] == INFINITO:
-            distancias[i] = 0
     
+    distancias[origem] = INFINITO
+
     return distancias
 
 #Algoritmo de Prim
 def prim(file):
-
     matriz = lerArquivo(file)
     numVertices = len(matriz[0])
     
